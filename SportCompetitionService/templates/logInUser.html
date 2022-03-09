@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="row justify-content-start">
+    <div class="col-12 col-sm-9 col-lg-8 ms-sm-5 login_signupForm">
+        <p class="h1 mb-5">Авторизация</p>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group-lg mb-3">
+                <input type="text" class="form-control" placeholder="Логин" aria-label="Login" name= "username"
+                       autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+            </div>
+
+            <div class="input-group-lg mb-3">
+                <input type="password" class="form-control" placeholder="Пароль" aria-label="Password" name= "password"
+                       autocapitalize="none" autocomplete="current-password" maxlength="150" required="" id="id_password">
+            </div>
+            <button type="submit" class="btn border-2 btn-warning">
+                Войти
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
