@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'SportCompetitionService.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'DB_NAME': DB_NAME,
-        'DB_USER': DB_USER,
-        'DB_PASSWORD': DB_PASSWORD,
-        'DB_HOST': DB_HOST,
-        'DB_PORT': '5432'
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': '5432'
     }
 }
 import dj_database_url
@@ -145,4 +145,4 @@ LOGIN_URL = '/login'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_ROOT = BASE_DIR.joinpath('SCS').joinpath('static')
+STATIC_ROOT = BASE_DIR.joinpath('static')
