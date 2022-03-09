@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'SCS',
-    'crispy_forms'
+    'SCSapp',
 ]
 
 MIDDLEWARE = [
@@ -62,12 +61,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'SCSapp.urls'
+ROOT_URLCONF = 'SportCompetitionService.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.joinpath('SCS').joinpath('templates')],
+        'DIRS': [BASE_DIR.joinpath('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SCSapp.wsgi.application'
+WSGI_APPLICATION = 'SportCompetitionService.wsgi.application'
 
 
 # Database
@@ -136,7 +135,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'SCS/static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
 LOGIN_URL = '/login'
@@ -145,10 +144,5 @@ LOGIN_URL = '/login'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'SCS/media')
-MEDIA_URL = 'mediaURL/'
 
 STATIC_ROOT = BASE_DIR.joinpath('SCS').joinpath('static')
