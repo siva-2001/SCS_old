@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+    <div class="row justify-content-start">
+        <div class="col-12 col-xl-10">
+            <p class="h3"></p>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group input-group-lg mb-3">
+                    <span class="input-group-text">Заголовок</span>
+                    {{ form.name }}
+                </div>
+
+                <div class="input-group input-group-lg mb-3">
+                    <span class="input-group-text">Организатор</span>
+                    {{ form.organizerName }}
+                </div>
+
+                <div class="input-group input-group-lg mb-3">
+                    <span class="input-group-text">Время подачи заявок</span>
+                    {{ form.lastTimeForApplications }}
+                </div>
+
+                <div class="input-group input-group-lg mb-3">
+                    <span class="input-group-text">Мин. кол-во команд</span>
+                    {{ form.theNumberOfTeamsRequiredToStartTheCompetition }}
+                </div>
+
+                <div class="input-group input-group-lg mb-3">
+                    <span class="input-group-text">Описание</span>
+                    {{ form.discription }}
+                </div>
+
+                <div class="row justify-content-end">
+                    <div class="col-auto">
+                        <button type="submit" class="btn createCompBtn">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-start">
+    <div class="col-12 col-sm-9 col-lg-8 ms-sm-5 login_signupForm">
+        <p class="h1 mb-5">Регистрация</p>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group-lg mb-3">
+                <input type="text" class="form-control" placeholder="Логин*" aria-label="Login" name= "username"
+                       autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
+            </div>
+            <div class="row">
+                <div class="col-12 col-xl-6 input-group-lg mb-3">
+                    <input type="text" class="form-control" placeholder="Имя" aria-label="Login" name= "first_name"
+                           autocapitalize="none" maxlength="150" id="id_firstname">
+                </div>
+
+                <div class="col-12 col-xl-6 input-group-lg mb-3">
+                    <input type="text" class="form-control" placeholder="Фамилия" aria-label="Login" name= "last_name"
+                           autocapitalize="none" maxlength="150"  id="id_lastname">
+                </div>
+            </div>
+            <div class="input-group-lg mb-3">
+                <input type="text" class="form-control" placeholder="E-mail*" aria-label="Login" name= "email"
+                       autocapitalize="none" maxlength="150" required="" id="id_email">
+            </div>
+            <div class="row">
+                <div class="col-12 col-xl-6 input-group-lg mb-3">
+                    <input type="password" class="form-control" placeholder="Пароль:*" aria-label="Password" name= "password1"
+                           autocapitalize="none" maxlength="150" required="" id="id_password1">
+                </div>
+
+                <div class="col-12 col-xl-6 input-group-lg mb-3">
+                    <input type="password" class="form-control" placeholder="Повторите пароль:*" aria-label="Password" name= "password2"
+                           autocapitalize="none" maxlength="150" required="" id="id_password2">
+                </div>
+            </div>
+            <button type="submit" class="btn border-2 btn-warning">
+                Зарегистрироваться
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
