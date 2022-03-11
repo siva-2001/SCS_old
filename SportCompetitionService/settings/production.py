@@ -34,7 +34,7 @@ DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 
 ALLOWED_HOSTS = [
-    'https://scs-app.herokuapp.com/'
+    'scs-app.herokuapp.com'
 ]
 
 
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'SCSapp',
-    'SCSapp.apps.ScsappConfig',
+    'SCSapp',
+    #'SCSapp.apps.ScsappConfig',
 ]
 
 MIDDLEWARE = [
