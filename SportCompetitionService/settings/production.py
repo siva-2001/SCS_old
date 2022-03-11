@@ -34,7 +34,7 @@ DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 
 ALLOWED_HOSTS = [
-    'scs-app.herokuapp.com'
+    '*'
 ]
 
 
