@@ -1,1 +1,0 @@
-web: gunicorn SportCompetitionService.SportCompetitionService.wsgi --log-file=-
