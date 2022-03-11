@@ -71,7 +71,7 @@ class RegistrPlayerForm(forms.ModelForm):
             }),
             'patronymic': TextInput(attrs={
                 'class': "form-control",
-                'placeholder': "Имя",
+                'placeholder': "Отчество",
             }),
             'age': TextInput(attrs={
                 'class': "form-control",

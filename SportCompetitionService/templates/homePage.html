@@ -27,6 +27,7 @@
         {% endfor %}
 
         <div class="row mt-5">
+            {% if not currentCompetitions.0 is None %}
             <div class="col-12 col-md-6">
                 <div class="row">
                     <h2>Текущие соревнования</h2>
@@ -43,7 +44,9 @@
                     </div>
                 {% endfor %}
             </div>
+            {% endif %}
 
+            {% if not pastCompetitions.0 is None %}
             <div class="col-12 col-md-6">
                 <div class="row">
                     <h2>Прошедшие соревнования</h2>
@@ -73,6 +76,7 @@
                     </div></div>
                 {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

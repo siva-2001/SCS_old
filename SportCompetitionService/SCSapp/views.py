@@ -56,7 +56,7 @@ def logoutUser(request):
     return redirect('homePage')
 
 def compHomePageView(request):
-    #checkCompetitionStart()
+    checkCompetitionStart()
     userAuth = request.user.is_authenticated
     announcedCompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
     currentCompetitions = Competition.objects.all().filter(status=Competition.CURRENT)
@@ -213,6 +213,8 @@ def competitionView(request, comp_id):
                 competition.name=request.POST['name']
                 competition.discription = request.POST['discription']
                 competition.organizerName = request.POST['organizerName']
+                competition.theNumberOfTeamsRequiredToStartTheCompetition = \
+                    request.POST['theNumberOfTeamsRequiredToStartTheCompetition']
                 if not request.POST['lastTimeForApplications'] == competition.getLastTimeForApplicationStr():
                     newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
                     competition.lastTimeForApplications = newCompDataTime
@@ -228,8 +230,9 @@ def competitionView(request, comp_id):
                 match.place = request.POST['form-' + str(index) + '-place']
                 match.matchDateTime = \
                     convertDTPickerStrToDateTime(request.POST['form-' + str(index) + '-matchDateTime'])
-                match.firstTeamScore = int(request.POST['form-' + str(index) + '-firstTeamScore'])
-                match.secondTeamScore = int(request.POST['form-' + str(index) + '-secondTeamScore'])
+                if match.secondTeam and match.firstTeam:
+                    match.firstTeamScore = int(request.POST['form-' + str(index) + '-firstTeamScore'])
+                    match.secondTeamScore = int(request.POST['form-' + str(index) + '-secondTeamScore'])
                 match.save()
                 if (not match.firstTeamScore == 0 or not match.secondTeamScore == 0):
                     competition.updateStanding(match.id)
