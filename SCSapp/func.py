@@ -14,14 +14,9 @@ def convertDTPickerStrToDateTime(str):
 
 def checkCompetitionStart():
     competitions = Competition.objects.all().filter(status= Competition.ANNOUNSED)
-    if len(competitions):
-        for comp in competitions:
-            if comp.lastTimeForApplications < pytz.UTC.localize(datetime.now()):
-                comp.makeStandings()
-
-
-
-
+    for comp in competitions:
+        if comp.lastTimeForApplications < pytz.UTC.localize(datetime.now()):
+            comp.makeStandings()
 
             #doMailing()
 
