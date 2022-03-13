@@ -97,8 +97,8 @@ class Competition(models.Model):
     lastTimeForApplications = models.DateTimeField(verbose_name="Заявки на участие принимаются до")
     competitionEndDateTime = models.DateTimeField(blank=True, null=True, verbose_name="Соревнование завершилось")
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Организатор")
-    organizerName = models.CharField(max_length=32, null=True)
-    theNumberOfTeamsRequiredToStartTheCompetition = models.IntegerField(default=4)
+    organizerName = models.CharField(max_length=32, null=True, verbose_name="Наименование организации проводящей турнир")
+    theNumberOfTeamsRequiredToStartTheCompetition = models.IntegerField(default=4, verbose_name="Необходимое количество команд")
     protocol = models.FileField(upload_to='competition_protocols', null=True, blank=True, verbose_name="Протокол")
 
 

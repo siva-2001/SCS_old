@@ -20,16 +20,16 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
 
-    path('login/', views.logInUserView, name='login'),
-    path('signup/', views.signUpUserView, name='signup'),
-    path('logout/', views.logoutUser, name="logout"),
+    path('login', views.logInUserView, name='login'),
+    path('signup', views.signUpUserView, name='signup'),
+    path('logout', views.logoutUser, name="logout"),
 
     path('', views.compHomePageView, name='homePage'),
-    path('past/', views.pastCompetitionsView, name='pastCompetition' ),
-    path('createCompetition/', views.createCompetitionsView, name='createCompetition'),
-    path('competition/<comp_id>/', views.competitionView, name='competition'),
+    path('past', views.pastCompetitionsView, name='pastCompetition' ),
+    path('createCompetition', views.createCompetitionsView, name='createCompetition'),
+    path('competition/<comp_id>', views.competitionView, name='competition'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
