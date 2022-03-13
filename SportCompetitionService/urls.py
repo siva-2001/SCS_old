@@ -29,7 +29,7 @@ urlpatterns = [
     path('', views.compHomePageView, name='homePage'),
     path('past/', views.pastCompetitionsView, name='pastCompetition' ),
     path('createCompetition/', views.createCompetitionsView, name='createCompetition'),
-    path('competition/<comp_id/>', views.competitionView, name='competition'),
+    path('competition/<comp_id>/', views.competitionView, name='competition'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
