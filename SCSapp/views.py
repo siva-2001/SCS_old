@@ -61,8 +61,9 @@ def compHomePageView(request):
     announcedCompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
     currentCompetitions = Competition.objects.all().filter(status=Competition.CURRENT)
     pastCompetitions = Competition.objects.all().filter(status=Competition.PAST)
-    if(len(pastCompetitions) > 5):
+    if(len(pastCompetitions) > 3):
         pastCompListIsLong = True
+        pastCompetitions = pastCompetitions[:3]
     else:
         pastCompListIsLong = False
 
@@ -91,7 +92,7 @@ def pastCompetitionsView(request):
     for comp in pastCompetitions:
         if len(comp.discription) > 200:
             comp.discription = comp.discription[:180] + "..."
-    pageLen = 3
+    pageLen = 5
     if len(pastCompetitions) > pageLen:
         paginator = Paginator(pastCompetitions, pageLen)
         page_number = request.GET.get('page', 1)
