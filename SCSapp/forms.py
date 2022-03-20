@@ -24,12 +24,13 @@ class CreateCompetitionsForm(forms.ModelForm):
                 'placeholder':"Время подачи заявок на участие",
                 'required':''
             }),
-            'name':TextInput(attrs={
+            'name':Textarea(attrs={
                 'id': 'id_name',
                 'type': "text",
                 'class': "form-control",
                 'placeholder': "Заголовок",
-                'required': ''
+                'required': '',
+                'style': 'resize:none;'
             }),
             'discription':Textarea(attrs={
                 'id': 'id_discription',
