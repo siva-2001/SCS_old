@@ -13,6 +13,12 @@
             {% endif %}
         </p>
         <p class="discription">{{ competition.discription }}</p>
+
+        {% if not userAuth and competition.status == competition.ANNOUNSED %}
+        <p class="h3" style="color:#660000;">Для подачи заявки необъодимо авторизоваться</p>
+        {% endif %}
+
+
     </div>
     <div class="col-12 col-md-3">
         <div class="row organizer">
@@ -230,9 +236,7 @@
 {% else %}
 <p class="h3" style="color: #339955"><strong> {{ teamFormAns }}</strong></p>
 
-{% if not userAuth and competition.status == competition.ANNOUNSED %}
-<p class="h3" style="color:#660000;">Подать заявку может только зарегистрированный пользователь</p>
-{% endif %}
+
 
 {% if not unableToCreateTeam %}         <!--            ЗАЯВКА НА УЧАСТИЕ             --->
     <form method="POST">
