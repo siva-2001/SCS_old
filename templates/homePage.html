@@ -20,7 +20,8 @@
                 <a href="{% url 'competition' competition.id %}">
                     <button type="button" class="btn px-5 border-2 btn-lg btn-warning mx-2">
                         {% if userIsJudge%} Редактировать
-                        {% else %}  Подать заявку   {% endif %}
+                        {% elif userAuth %}  Подать заявку
+                        {% else %} Подробнее {% endif %}
                     </button>
                 </a>
             </div>
