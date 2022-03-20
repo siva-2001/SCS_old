@@ -214,11 +214,12 @@ def competitionView(request, comp_id):
                 competition.name=request.POST['name']
                 competition.discription = request.POST['discription']
                 competition.organizerName = request.POST['organizerName']
-                competition.theNumberOfTeamsRequiredToStartTheCompetition = \
-                    request.POST['theNumberOfTeamsRequiredToStartTheCompetition']
-                if not request.POST['lastTimeForApplications'] == competition.getLastTimeForApplicationStr():
-                    newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
-                    competition.lastTimeForApplications = newCompDataTime
+                if competition.status == Competition.ANNOUNSED:
+                    competition.theNumberOfTeamsRequiredToStartTheCompetition = \
+                        request.POST['theNumberOfTeamsRequiredToStartTheCompetition']
+                    if not request.POST['lastTimeForApplications'] == competition.getLastTimeForApplicationStr():
+                        newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
+                        competition.lastTimeForApplications = newCompDataTime
                 competition.save()
 
 
