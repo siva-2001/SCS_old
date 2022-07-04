@@ -60,7 +60,17 @@
                                 <p class="h5"> {{ competition.discription }} </p>
                                 <div class="row">
                                     <div class="col-6">
+
+                                        {% if userIsJudge%}
+                                        <a href="{% url 'competition' competition.id %}">
+                                            <button type="button" class="btn px-5 border-2 btn-lg btn-warning mx-2">
+                                                Редактировать
+                                            </button>
+                                        </a>
+                                        {% else %}
                                         <a href="{% url 'competition' competition.id %}"><h4>Подробнее</h4></a>
+                                        {% endif %}
+
                                     </div>
                                     <div class="col-6">
 
