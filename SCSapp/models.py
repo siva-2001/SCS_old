@@ -132,12 +132,10 @@ class Competition(models.Model):
         self.save()
         standingElemets = []
 
-
         while(len(standingElemets) < len(teams)):
             num = random.randint(0, len(teams)-1)
             if not teams[num] in standingElemets:
                 standingElemets.append(teams[num])
-
 
         tours = 0
         while(pow(tours, 2) <= len(teams)):
@@ -206,12 +204,6 @@ class Competition(models.Model):
             self.competitionEndDateTime = pytz.UTC.localize(datetime.now())
             self.save()
         match.save()
-
-
-
-
-
-
 
 
 class Match(models.Model):
