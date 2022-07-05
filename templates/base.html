@@ -29,49 +29,51 @@
                                 <img src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
                             </button>
                         </div>
-                        <div class="collapse navbar-collapse" id="navbarID">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <div class="col-auto my-3">
-                                        <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
-                                            На главную
-                                        </a>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <div class="col-auto">
-                                        {% if userIsJudge %}
-                                            <a href="{% url 'createCompetition' %}">
-                                                <button type="button" class="btn my-2 border-2 btn-lg btn-outline-primary mx-2">Создать соревнование</button>
+                        <div class="col-auto my-3">
+                            <div class="collapse navbar-collapse" id="navbarID">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <div class="col-auto my-3">
+                                            <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
+                                                На главную
                                             </a>
-                                        {% endif %}
-                                    </div>
-                                </li>
-                                <li>
-                                                            <div class="col my-3">
-                            <div class="row justify-content-end">
-                                {% if userAuth %}
-                                <div class="col text-end">
-                                    <a class="nav-link" href="{% url 'logout' %}">Выход</a>
-                                </div>
-                                {% else %}
-                                <div class="col text-end">
-                                    <a class="nav-link" href="{% url 'signup' %}">
-                                        Регистрация
-                                    </a>
-                                </div>
-                                <div class="col-sm-3 col-md-2 text-end bx-0">
-                                    <a class="nav-link" href="{% url 'login' %}">
-                                        Вход
-                                    </a>
-                                </div>
-                                {% endif %}
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <div class="col-auto">
+                                            {% if userIsJudge %}
+                                                <a href="{% url 'createCompetition' %}">
+                                                    <button type="button" class="btn my-2 border-2 btn-lg btn-outline-primary mx-2">Создать соревнование</button>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="col my-3">
+                                            <div class="row justify-content-end">
+                                                {% if userAuth %}
+                                                <div class="col text-end">
+                                                    <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+                                                </div>
+                                                {% else %}
+                                                <div class="col text-end">
+                                                    <a class="nav-link" href="{% url 'signup' %}">
+                                                        Регистрация
+                                                    </a>
+                                                </div>
+                                                <div class="col-sm-3 col-md-2 text-end bx-0">
+                                                    <a class="nav-link" href="{% url 'login' %}">
+                                                        Вход
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
                             </div>
-                        </div>
-                                </li>
-
-
-                            </ul>
                         </div>
 
 
