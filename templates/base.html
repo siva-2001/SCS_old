@@ -34,12 +34,10 @@
                                 <li class="nav-item">
                                     <div class="col-auto my-3">
                                         <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
-                                            <img src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
                                             На главную
                                         </a>
                                     </div>
                                 </li>
-
                                 <li class="nav-item">
                                     <div class="col-auto">
                                         {% if userIsJudge %}
@@ -49,10 +47,8 @@
                                         {% endif %}
                                     </div>
                                 </li>
-                            </ul>
-                        </div>
-
-                        <div class="col my-3">
+                                <li>
+                                                            <div class="col my-3">
                             <div class="row justify-content-end">
                                 {% if userAuth %}
                                 <div class="col text-end">
@@ -72,6 +68,13 @@
                                 {% endif %}
                             </div>
                         </div>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+
 
                     </div>
                 </div>
