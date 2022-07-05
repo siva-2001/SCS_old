@@ -186,7 +186,7 @@ def competitionView(request, comp_id):
                 'secondTeamScore':match.secondTeamScore
             }
             matchFormSetInitData.append(matchFormInitData)
-            matchesEvents.append(MatchEvent.objects.all().filter(match=match))
+            matchesEvents.append(MatchEvent.objects.all().filter(match=match))  #   передача событий матча, отображения пока нет
             if match.matchDateTime and nextMDT:
                 if match.matchDateTime > now and match.matchDateTime < nextMDT:
                     nextMDT = match.matchDateTime
@@ -197,6 +197,14 @@ def competitionView(request, comp_id):
         matchFormSet = MatchFormSet(initial=matchFormSetInitData)
         indexes = [i for i in range(0, len(matches))]
         matchesData = list(zip(matches, matchesEvents, matchFormSet, indexes))
+
+        for matchForm, ind in matchFormSet, indexes:
+            matchForm.fields['matchDateTime'].widget.attrs.update({
+                'id': 'id_datetimepicker_' + string(ind)
+            })
+
+
+
 
         requestData = {
             "userIsJudge":request.user.has_perm('SCS.control_competition'),

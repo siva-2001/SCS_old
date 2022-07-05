@@ -109,6 +109,7 @@ class RegistrVolleybolTeamForm(forms.ModelForm):
 
 class MatchEditForm(forms.ModelForm):
     id = forms.IntegerField()
+
     class Meta:
         model = Match
         fields = ['name', 'place', 'matchDateTime', 'firstTeamScore', 'secondTeamScore']
@@ -148,7 +149,6 @@ class MatchEditForm(forms.ModelForm):
                 'placeholder': "Название или адрес спорткомплекса",
                 'required': '',
             }),
-
         }
 
 class SignUpUser(forms.ModelForm):
