@@ -198,7 +198,7 @@ def competitionView(request, comp_id):
         indexes = [i for i in range(0, len(matches))]
         matchesData = list(zip(matches, matchesEvents, matchFormSet, indexes))
 
-        for matchForm, ind in matchFormSet, indexes:
+        for matchForm, ind in zip(matchFormSet, indexes):
             matchForm.fields['matchDateTime'].widget.attrs.update({
                 'id': 'id_datetimepicker_' + string(ind)
             })
