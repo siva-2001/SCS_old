@@ -34,9 +34,8 @@
                             </a>
                         </div>
                         <div class="col">
-                            <div class="collapse navbar-collapse" id="navbarID">
-                                <ul class="justify-content-md-between navbar-nav me-auto mb-2 mb-lg-0">
-
+                            <div class="justify-content-md-between collapse navbar-collapse" id="navbarID">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                                     {% if userIsJudge %}
                                     <li class="nav-item d-md-none">
                                         <div class="col-auto text-end">
@@ -46,7 +45,6 @@
                                         </div>
                                     </li>
                                     {% endif %}
-
                                     <li class="nav-item d-md-none">
                                         <div class="col-auto text-end">
                                             <a class="nav-link" href="{% url 'homePage' %}">
@@ -54,7 +52,6 @@
                                             </a>
                                         </div>
                                     </li>
-
                                     {% if userIsJudge %}
                                     <li class="nav-item d-none d-md-block">
                                         <div class="col-auto">
@@ -64,7 +61,6 @@
                                         </div>
                                     </li>
                                     {% endif %}
-
                                     {% if userAuth %}
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
