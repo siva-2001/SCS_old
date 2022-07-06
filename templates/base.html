@@ -33,28 +33,27 @@
                                 На главную
                             </a>
                         </div>
-<!--                        <div class="col">-->
-<!--                            <div class="d-none d-md-block row">-->
-                                {% if userIsJudge %}
-                                <div class="col-auto">
-                                    <a href="{% url 'createCompetition' %}">
-                                        <button type="button" class="btn my-2 border-2 btn-lg btn-outline-primary mx-2">Создать соревнование</button>
-                                    </a>
-                                </div>
-                                {% endif %}
-                                {% if userAuth %}
-                                <div class="col-auto">
-                                    <a class="nav-link my-md-3 mx-md-3" href="{% url 'logout' %}">Выход</a>
-                                </div>
-                                {% else %}
-                                <div class="col-auto">
-                                    <a class="nav-link my-md-3 mx-md-3" href="{% url 'signup' %}">Регистрация</a>
-                                </div>
-                                <div class="col-auto">
-                                    <a class="nav-link my-md-3 mx-md-3" href="{% url 'login' %}">Вход</a>
-                                </div>
-                                {% endif %}
-<!--                            </div>-->
+
+                        {% if userIsJudge %}
+                        <div class="col-auto d-none d-md-block">
+                            <a href="{% url 'createCompetition' %}">
+                                <button type="button" class="btn my-2 border-2 btn-lg btn-outline-primary mx-2">Создать соревнование</button>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if userAuth %}
+                        <div class="col-auto d-none d-md-block">
+                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'logout' %}">Выход</a>
+                        </div>
+                        {% else %}
+                        <div class="col-auto d-none d-md-block">
+                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'signup' %}">Регистрация</a>
+                        </div>
+                        <div class="col-auto d-none d-md-block">
+                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'login' %}">Вход</a>
+                        </div>
+                        {% endif %}
+
 
                             <div class="d-md-none">
                                 <div class="collapse navbar-collapse" id="navbarID">
