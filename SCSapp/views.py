@@ -110,7 +110,8 @@ def createCompetitionsView(request):
     userAuth = request.user.is_authenticated
     if request.user.has_perm('SCS.control_competition'):
         if request.method == "GET":
-            return render(request, 'createCompetitions.html', {'form':CreateCompetitionsForm()})
+            return render(request, 'createCompetitions.html', {'form':CreateCompetitionsForm(), "userAuth":userAuth,
+                                                               "userIsJudge": request.user.has_perm('SCS.control_competition')})
         else:
             try:
                 newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
