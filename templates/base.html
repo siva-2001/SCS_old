@@ -33,13 +33,13 @@
                                 На главную
                             </a>
                         </div>
-                        <div class="col justify-content-end">
+                        <div class="col">
                             <div class="collapse navbar-collapse" id="navbarID">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                                     {% if userIsJudge %}
                                     <li class="nav-item d-md-none">
-                                        <div class="col-auto">
+                                        <div class="col-auto justify-content-end">
                                             <a href="{% url 'createCompetition' %}">
                                                 <button type="button" class="btn my-2 border-2 btn-lg btn-outline-primary mx-2">Создать соревнование</button>
                                             </a>
