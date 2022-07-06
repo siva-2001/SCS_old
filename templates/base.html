@@ -32,13 +32,6 @@
                         <div class="col-auto mt-3 justify-content-md-end ">
                             <div class="collapse navbar-collapse" id="navbarID">
                                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <div class="col-auto text-end">
-                                            <a class="nav-link" href="{% url 'homePage' %}">
-                                                На главную
-                                            </a>
-                                        </div>
-                                    </li>
                                     {% if userIsJudge %}
                                     <li class="nav-item">
                                         <div class="col-auto">
@@ -48,6 +41,13 @@
                                         </div>
                                     </li>
                                     {% endif %}
+                                    <li class="nav-item">
+                                        <div class="col-auto text-end">
+                                            <a class="nav-link" href="{% url 'homePage' %}">
+                                                На главную
+                                            </a>
+                                        </div>
+                                    </li>
                                     {% if userAuth %}
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
@@ -56,7 +56,7 @@
                                     </li>
                                     {% else %}
                                     <li class="nav-item">
-                                        <div class="col text-end">
+                                        <div class="col-auto text-end">
                                             <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
                                         </div>
                                     </li>
