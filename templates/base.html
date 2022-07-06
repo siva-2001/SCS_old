@@ -28,6 +28,10 @@
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarID" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                                 <img src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
                             </button>
+                            <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
+                                <img class="d-none d-md-block" src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
+                                На главную
+                            </a>
                         </div>
                         <div class="col-auto mt-3 justify-content-md-end ">
                             <div class="collapse navbar-collapse" id="navbarID">
@@ -43,13 +47,11 @@
                                     </li>
                                     {% endif %}
 
-                                    <li class="nav-item">
+                                    <li class="nav-item d-md-none">
                                         <div class="col">
                                             <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
-                                                <div class="row">
-                                                    <img class="d-none d-md-block" src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
-                                                    На главную
-                                                </div>
+                                                <img class="d-none d-md-block" src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
+                                                На главную
                                             </a>
                                         </div>
                                     </li>
