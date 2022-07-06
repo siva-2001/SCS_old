@@ -68,18 +68,18 @@
                                     {% if userAuth %}
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
-                                            <a class="nav-link mt-md-3" href="{% url 'logout' %}">Выход</a>
+                                            <a class="nav-link my-md-3" href="{% url 'logout' %}">Выход</a>
                                         </div>
                                     </li>
                                     {% else %}
                                     <li class="nav-item">
-                                        <div class="col-auto text-end">
-                                            <a class="nav-link mt-md-3" href="{% url 'signup' %}">Регистрация</a>
+                                        <div class="col-auto  text-end">
+                                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'signup' %}">Регистрация</a>
                                         </div>
                                     </li>
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
-                                            <a class="nav-link mt-md-3" href="{% url 'login' %}">Вход</a>
+                                            <a class="nav-link my-md-3" href="{% url 'login' %}">Вход</a>
                                         </div>
                                     </li>
                                     {% endif %}
