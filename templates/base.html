@@ -68,7 +68,7 @@
                                     {% if userAuth %}
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
-                                            <a class="nav-link my-md-3" href="{% url 'logout' %}">Выход</a>
+                                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'logout' %}">Выход</a>
                                         </div>
                                     </li>
                                     {% else %}
@@ -79,38 +79,10 @@
                                     </li>
                                     <li class="nav-item">
                                         <div class="col-auto text-end">
-                                            <a class="nav-link my-md-3" href="{% url 'login' %}">Вход</a>
+                                            <a class="nav-link my-md-3 mx-md-3" href="{% url 'login' %}">Вход</a>
                                         </div>
                                     </li>
                                     {% endif %}
-<!--                                    <li>-->
-<!--                                        <div class="col my-3">-->
-<!--                                            <div class="row justify-content-end">-->
-<!--                                                {% if userAuth %}-->
-<!--                                                <div class="col text-end">-->
-<!--                                                    <a class="nav-link" href="{% url 'logout' %}">Выход</a>-->
-<!--                                                </div>-->
-
-
-<!--                                                {% else %}-->
-<!--                                                <div class="col text-end">-->
-<!--                                                    <div class="row">-->
-<!--                                                        <a class="nav-link" href="{% url 'signup' %}">-->
-<!--                                                            Регистрация-->
-<!--                                                        </a>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                <div class="col text-end">-->
-<!--                                                    <div class="row">-->
-<!--                                                        <a class="nav-link" href="{% url 'login' %}">-->
-<!--                                                            Вход-->
-<!--                                                        </a>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                {% endif %}-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </li>-->
                                 </ul>
                             </div>
                         </div>
