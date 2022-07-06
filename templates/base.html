@@ -28,8 +28,8 @@
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarID" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                                 <img src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
                             </button>
-                            <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
-                                <img class="d-none d-md-block" src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
+                            <a class="navbar-brand nav-link d-none d-md-block" href="{% url 'homePage' %}">
+                                <img src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
                                 На главную
                             </a>
                         </div>
@@ -49,8 +49,7 @@
 
                                     <li class="nav-item d-md-none">
                                         <div class="col">
-                                            <a class="navbar-brand nav-link" href="{% url 'homePage' %}">
-                                                <img class="d-none d-md-block" src="{% static 'volleyball.png' %}" alt="" width="60" height="52">
+                                            <a class="nav-link" href="{% url 'homePage' %}">
                                                 На главную
                                             </a>
                                         </div>
