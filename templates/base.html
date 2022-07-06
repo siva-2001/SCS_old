@@ -57,14 +57,18 @@
                                                 </div>
                                                 {% else %}
                                                 <div class="col text-end">
-                                                    <a class="nav-link" href="{% url 'signup' %}">
-                                                        Регистрация
-                                                    </a>
+                                                    <div class="row">
+                                                        <a class="nav-link" href="{% url 'signup' %}">
+                                                            Регистрация
+                                                        </a>
+                                                    </div>
                                                 </div>
                                                 <div class="col text-end">
-                                                    <a class="nav-link" href="{% url 'login' %}">
-                                                        Вход
-                                                    </a>
+                                                    <div class="row">
+                                                        <a class="nav-link" href="{% url 'login' %}">
+                                                            Вход
+                                                        </a>
+                                                    </div>
                                                 </div>
                                                 {% endif %}
                                             </div>
