@@ -4,6 +4,8 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
+import smtplib
+
 
 class VolleyballTeam(models.Model):
     name = models.CharField(max_length=64, verbose_name="Название")
@@ -204,6 +206,9 @@ class Competition(models.Model):
             self.competitionEndDateTime = pytz.UTC.localize(datetime.now())
             self.save()
         match.save()
+
+  #  def doMailingAboutCurrent(self):
+
 
 
 class Match(models.Model):
