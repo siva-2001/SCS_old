@@ -73,11 +73,11 @@ def compHomePageView(request):
         if len(comp.discription) > 150:
             comp.discription = comp.discription[:130] + "..."
     for comp in currentCompetitions:
-        if len(comp.discription) > 100:
-            comp.discription = comp.discription[:80] + "..."
+        if len(comp.discription) > 150:
+            comp.discription = comp.discription[:130] + "..."
     for comp in pastCompetitions:
-        if len(comp.discription) > 100:
-            comp.discription = comp.discription[:80] + "..."
+        if len(comp.discription) > 150:
+            comp.discription = comp.discription[:130] + "..."
     #
     #
     return render(request, 'homePage.html', {'announcedCompetitions': announcedCompetitions,
@@ -247,7 +247,6 @@ def competitionView(request, comp_id):
                 match.save()
                 if (not match.firstTeamScore == 0 or not match.secondTeamScore == 0):
                     competition.updateStanding(match.id)
-
 
             elif request.POST['formType'] == "teamRegistrForm":
                 #playerFormSet = PlayerFormSet(request.POST)                                <---------------------->
