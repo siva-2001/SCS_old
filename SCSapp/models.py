@@ -4,7 +4,7 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
-import smtplib
+from .func import sentMail
 
 
 class VolleyballTeam(models.Model):
@@ -207,7 +207,16 @@ class Competition(models.Model):
             self.save()
         match.save()
 
-  #  def doMailingAboutCurrent(self):
+    def doMailingAboutCurrent(self):
+        users = User.objects.all()
+        strRecipients = ''
+        for user in users:
+            if user.email:
+                strRecipients = strRecipients + user.email + ', '
+        strRecipients = strRecipients[:-2]
+        message = f"Соревнования {self.name} стартовали!"
+        sentMail(message=message, strRecipients=strRecipients)
+
 
 
 
