@@ -206,8 +206,9 @@ class Competition(models.Model):
             self.competitionEndDateTime = pytz.UTC.localize(datetime.now())
             self.save()
         match.save()
+        self.doMailingAboutStart()
 
-    def doMailingAboutCurrent(self):
+    def doMailingAboutStart(self):
         users = User.objects.all()
         strRecipients = ''
         for user in users:
