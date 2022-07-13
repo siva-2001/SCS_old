@@ -4,7 +4,7 @@ Django==4.0.3
 gunicorn==20.1.0
 psycopg2-binary==2.9.3
 pytz==2021.3
-email==3.0.1
+email==4.0.2
 fpdf==1.7.2
 sqlparse==0.4.2
 whitenoise==6.0.0
