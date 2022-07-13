@@ -13,12 +13,13 @@
             {% endif %}
         </p>
         <p class="discription">{{ competition.discription }}</p>
-
+        {% if competition.status == 'Past'%}
             <a href="{{ competition.protocol.url }}" download>
                 <div class="protocol">
                     <p class="h3">Протокол</p>
                 </div>
             </a>
+        {% endif %}
 
 
 
