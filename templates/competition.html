@@ -14,6 +14,14 @@
         </p>
         <p class="discription">{{ competition.discription }}</p>
 
+            <a href="{{ competition.protocol.url }}" download>
+                <div class="protocol">
+                    <p class="h3">Протокол</p>
+                </div>
+            </a>
+
+
+
         {% if not userAuth and competition.status == competition.ANNOUNSED %}
         <p class="h3 mt-5" style="color:#880000;">Для подачи заявки необходимо авторизоваться</p>
         {% endif %}

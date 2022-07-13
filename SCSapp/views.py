@@ -56,7 +56,9 @@ def logoutUser(request):
     return redirect('homePage')
 
 def compHomePageView(request):
-    checkCompetitionStart()
+    #ompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
+    checkCompetitionStart(Competition.objects.all().filter(status=Competition.ANNOUNSED))
+
     userAuth = request.user.is_authenticated
     announcedCompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
     currentCompetitions = Competition.objects.all().filter(status=Competition.CURRENT)
@@ -136,7 +138,8 @@ def createCompetitionsView(request):
 
 
 def competitionView(request, comp_id):
-    checkCompetitionStart()
+    #competitions = Competition.objects.all().filter(status= Competition.ANNOUNSED)
+    checkCompetitionStart(Competition.objects.all().filter(status= Competition.ANNOUNSED))
 
     userAuth = request.user.is_authenticated
     competition = get_object_or_404(Competition, pk=comp_id)
@@ -204,9 +207,6 @@ def competitionView(request, comp_id):
                 'id': 'id_datetimepicker_' + str(ind)
             })
 
-
-
-
         requestData = {
             "userIsJudge":request.user.has_perm('SCS.control_competition'),
             "matchesData":matchesData, "competition":competition, "compForm":compForm, 'matchFormSet':matchFormSet,
@@ -244,9 +244,12 @@ def competitionView(request, comp_id):
                 if match.secondTeam and match.firstTeam:
                     match.firstTeamScore = int(request.POST['form-' + str(index) + '-firstTeamScore'])
                     match.secondTeamScore = int(request.POST['form-' + str(index) + '-secondTeamScore'])
-                match.save()
-                if (not match.firstTeamScore == 0 or not match.secondTeamScore == 0):
+                if not(int(request.POST['form-' + str(index) + '-firstTeamScore']) == 0 and
+                       int(request.POST['form-' + str(index) + '-secondTeamScore'])):
+                    match.status_isCompleted = True
+                    match.save()
                     competition.updateStanding(match.id)
+                match.save()
 
             elif request.POST['formType'] == "teamRegistrForm":
                 #playerFormSet = PlayerFormSet(request.POST)                                <---------------------->

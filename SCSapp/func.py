@@ -1,6 +1,5 @@
 from datetime import datetime
 import pytz
-from .models import Competition
 import smtplib
 from email.message import EmailMessage
 
@@ -15,8 +14,7 @@ def convertDTPickerStrToDateTime(DTPStr):
     return newCompDataTime
 
 #       Вызывается при переходе на главную и страницу любого соревнования
-def checkCompetitionStart():
-    competitions = Competition.objects.all().filter(status= Competition.ANNOUNSED)
+def checkCompetitionStart(competitions):
     for comp in competitions:
         if comp.lastTimeForApplications < pytz.UTC.localize(datetime.now()):
             comp.makeStandings()

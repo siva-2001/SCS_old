@@ -4,7 +4,11 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
+from SportCompetitionService.something.local_settings import MEDIA_ROOT
+import SportCompetitionService.something.local_settings
 from .func import sentMail
+from .protocolCreator import PDF
+
 
 
 class VolleyballTeam(models.Model):
@@ -18,8 +22,18 @@ class VolleyballTeam(models.Model):
         verbose_name = 'Команда'
         verbose_name_plural = 'Команды'
 
-    def __str__(self):
+    def __str__(self):#
         return self.name
+
+    def getRegisteredTime(self):
+        return self.registratedTime.strftime("%H:%M   %Y:%m:%d")
+
+    def getProtocolFormat(self):
+        if not(len(self.user.last_name) == 0 and len(self.user.first_name) == 0):
+            return {"name":self.name,"registeredTime":self.getRegisteredTime(),
+                    "user":(self.user.last_name + " " + self.user.first_name[:1] + ".")}
+        else:
+            return  {"name": self.name, "registeredTime": self.getRegisteredTime(), "user":' '}
 
 #    def get_ablolut_url(self):
 #        return reverse()
@@ -101,7 +115,7 @@ class Competition(models.Model):
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Организатор")
     organizerName = models.CharField(max_length=32, null=True, verbose_name="Наименование организации проводящей турнир")
     theNumberOfTeamsRequiredToStartTheCompetition = models.IntegerField(default=4, verbose_name="Необходимое количество команд")
-    protocol = models.FileField(upload_to='competition_protocols', null=True, blank=True, verbose_name="Протокол")
+    protocol = models.FileField(upload_to='protocols', null=True, blank=True, verbose_name="Протокол")
 
 
     class Meta:
@@ -120,10 +134,10 @@ class Competition(models.Model):
 
 
     def getLastTimeForApplicationStr(self):
-        return self.lastTimeForApplications.strftime("%Y:%m:%d   %H:%M")
+        return self.lastTimeForApplications.strftime("%H:%M   %Y:%m:%d")
 
     def getEndDateTimeStr(self):
-        return self.competitionEndDateTime.strftime("%Y:%m:%d   %H:%M")
+        return self.competitionEndDateTime.strftime("%H:%M   %Y:%m:%d")
 
     def makeStandings(self):
         teams = VolleyballTeam.objects.all().filter(competition=self)
@@ -185,7 +199,6 @@ class Competition(models.Model):
 
     def updateStanding(self, matchID):
         match = Match.objects.all().get(id=matchID)
-        match.status_isCompleted = True
         nextMatch = match.nextMatch
         if(nextMatch):
             if nextMatch.firstTeam:
@@ -205,10 +218,25 @@ class Competition(models.Model):
             self.status = Competition.PAST
             self.competitionEndDateTime = pytz.UTC.localize(datetime.now())
             self.save()
-        match.save()
-        self.doMailingAboutStart()
+            self.GenerateProtocol()
+        self.DoMailingAboutStart()
 
-    def doMailingAboutStart(self):
+    def GenerateProtocol(self):
+        pdf = PDF()
+        teams = VolleyballTeam.objects.all().filter(competition=self)
+        matches = Match.objects.all().filter(competition=self)
+        teamsPF, matchesPF = [], []
+        for team in teams:
+            teamsPF.append(team.getProtocolFormat())
+        for match in matches:
+            matchesPF.append( match.getProtocolFormat())
+        pdf.CompetitionProtocol(self.name, teamsPF, matchesPF,
+                                self.organizer.first_name + "  " + self.organizer.last_name, str(self.getEndDateTimeStr()))
+        self.protocol = f'protocols/{self.name}.pdf'
+        self.save()
+
+
+    def DoMailingAboutStart(self):
         users = User.objects.all()
         strRecipients = ''
         for user in users:
@@ -217,6 +245,8 @@ class Competition(models.Model):
         strRecipients = strRecipients[:-2]
         message = f"Соревнования {self.name} стартовали!"
         sentMail(message=message, strRecipients=strRecipients)
+
+
 
 
 
@@ -247,3 +277,17 @@ class Match(models.Model):
 
     def __str__(self):
         return f"Матч '{self.name}'"
+
+    def getProtocolFormat(self):
+        if self.firstTeamScore > self.secondTeamScore:
+            winScore = self.firstTeamScore
+            losScore = self.secondTeamScore
+            winner = self.firstTeam.name
+            loser = self.secondTeam.name
+        else:
+            winScore = self.secondTeamScore
+            losScore = self.firstTeamScore
+            winner = self.secondTeam.name
+            loser = self.firstTeam.name
+        return {"time":self.getDateTime(),"place":self.place,"winner":winner,
+                "winScore":str(winScore), "loser":loser, "losScore":str(losScore)}

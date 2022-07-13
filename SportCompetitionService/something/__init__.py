@@ -1,4 +1,4 @@
 try:
-    from .local_settings import *
+    from SportCompetitionService.something.local_settings import *
 except ImportError:
     pass
