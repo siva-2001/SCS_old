@@ -12,6 +12,7 @@
             </a>
             {% endif %}
         </p>
+        <!--    Протокол            -->
         <p class="discription">{{ competition.discription }}</p>
         {% if competition.status == 'Past'%}
             <a href="{{ competition.protocol.url }}" download>
@@ -20,8 +21,6 @@
                 </div>
             </a>
         {% endif %}
-
-
 
         {% if not userAuth and competition.status == competition.ANNOUNSED %}
         <p class="h3 mt-5" style="color:#880000;">Для подачи заявки необходимо авторизоваться</p>

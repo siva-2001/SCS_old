@@ -60,7 +60,7 @@ class PDF(FPDF):
 
     def CompetitionProtocol(self, compName, teams, matches, orgName, date):
         self.add_page()
-        #self.add_font('DejaVu', '', 'DejaVuSerif.ttf', uni=True)
+        self.add_font('DejaVu', '', 'DejaVuSerif.ttf', uni=True)
         self.set_text_color(0,0,0)
         self.Titles(compName)
         self.Teams(teams)
