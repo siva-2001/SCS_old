@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from io import BytesIO
 
 class PDF(FPDF):
     pdf_w = 210
@@ -66,4 +67,4 @@ class PDF(FPDF):
         self.Teams(teams)
         self.Matches(matches)
         self.OrganizerSignature(orgName, date)
-        self.output(f'media/protocols/{compName}.pdf', 'F')
+        self.output("tempFile.pdf","F")

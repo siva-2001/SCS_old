@@ -4,11 +4,12 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
-from SportCompetitionService.something.local_settings import MEDIA_ROOT
-import SportCompetitionService.something.local_settings
+from SportCompetitionService.settings import MEDIA_ROOT
+import SportCompetitionService.settings
 from .func import sentMail
 from .protocolCreator import PDF
-
+from django.core.files import File
+import os
 
 
 class VolleyballTeam(models.Model):
@@ -232,7 +233,9 @@ class Competition(models.Model):
             matchesPF.append( match.getProtocolFormat())
         pdf.CompetitionProtocol(self.name, teamsPF, matchesPF,
                                 self.organizer.first_name + "  " + self.organizer.last_name, str(self.getEndDateTimeStr()))
-        self.protocol = f'protocols/{self.name}.pdf'
+        with open("tempFile.pdf", 'rb') as protocol:
+            self.protocol.save(self.name+".pdf", File(protocol), save=False)
+        os.remove("tempFile.pdf")
         self.save()
 
 
