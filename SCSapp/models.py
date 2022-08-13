@@ -4,8 +4,6 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
-from SportCompetitionService.settings import MEDIA_ROOT
-import SportCompetitionService.settings
 from .func import sentMail
 from .protocolCreator import PDF
 from django.core.files import File

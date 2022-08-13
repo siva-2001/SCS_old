@@ -1,4 +1,4 @@
 try:
-    from SportCompetitionService.settings import *
+    from SportCompetitionService.something._settings import *
 except ImportError:
     pass
