@@ -1,5 +1,4 @@
 from fpdf import FPDF
-from io import BytesIO
 
 class PDF(FPDF):
     pdf_w = 210
