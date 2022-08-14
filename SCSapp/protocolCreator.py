@@ -59,11 +59,14 @@ class PDF(FPDF):
         self.cell(w=30, h=7, align='C', border="B", ln=1)
 
     def CompetitionProtocol(self, compName, teams, matches, orgName, date):
-        self.add_page()
-        self.add_font('DejaVu', '', 'DejaVuSerif.ttf', uni=True)
-        self.set_text_color(0,0,0)
-        self.Titles(compName)
-        self.Teams(teams)
-        self.Matches(matches)
-        self.OrganizerSignature(orgName, date)
-        self.output("tempFile.pdf","F")
+        try:
+            self.add_page()
+            self.add_font('DejaVu', '', 'DejaVuSerif.ttf', uni=True)
+            self.set_text_color(0,0,0)
+            self.Titles(compName)
+            self.Teams(teams)
+            self.Matches(matches)
+            self.OrganizerSignature(orgName, date)
+            self.output("tempFile.pdf","F")
+        except Exception as ex:
+            self.error(f'Протокол не был создан:{ex}')
