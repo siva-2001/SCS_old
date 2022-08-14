@@ -1,7 +1,7 @@
 asgiref==3.5.0
 dj-database-url==0.5.0
 Django==4.0.3
--e git+https://github.com/siva-2001/SCS.git@b242f99a56f3702675c277fa40407af875f72296#egg=fpdf&subdirectory=PIPdistributions/pyfpdf-binary
+-e PIPdistributions/pyfpdf-binary
 gunicorn==20.1.0
 psycopg2-binary==2.9.3
 pytz==2021.3
