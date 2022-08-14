@@ -14,7 +14,7 @@
         </p>
         <!--    Протокол            -->
         <p class="discription">{{ competition.discription }}</p>
-        {% if competition.status == 'Past'%}
+        {% if competition.status == 'Past'%}        <!--      смена условия на наличиче\отсутствие протокола      -->
             <a href="{{ competition.protocol.url }}" download>
                 <div class="protocol">
                     <p class="h3">Скачать протокол соревнований</p>
