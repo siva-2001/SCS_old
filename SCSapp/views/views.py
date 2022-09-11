@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Competition, Match, MatchEvent, VolleyballTeam, Player
-from .forms import CreateCompetitionsForm, RegistrVolleybolTeamForm, RegistrPlayerForm, MatchEditForm, SignUpUser
+from SCSapp.models import Competition, Match, MatchEvent, VolleyballTeam, Player
+from SCSapp.forms import CreateCompetitionsForm, RegistrVolleybolTeamForm, RegistrPlayerForm, MatchEditForm, SignUpUser
 from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-#from django.db.models.functions.datetime import datetime
 from django.forms import formset_factory
 from django.core.paginator import Paginator
 import pytz
 from datetime import timedelta, datetime
-from .func import convertDTPickerStrToDateTime, checkCompetitionStart
+from SCSapp.func import convertDTPickerStrToDateTime, checkCompetitionStart
 
 
 def signUpUserView(request):

@@ -16,7 +16,7 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-locDev = bool( os.environ.get('LOCAL_DEV', False))
+locDev = bool(os.environ.get('LOCAL_DEV', False))
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-f^3e*z733hxal^(6r$%h_d111_1r&g2&o0w0@urb%c-&(p!c7=')
 DB_NAME = os.environ.get('DB_NAME')
@@ -25,7 +25,6 @@ DB_HOST = os.environ.get('DB_HOST')
 DB_USER = os.environ.get('DB_USER')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-
 
 # Quick-start development something - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
