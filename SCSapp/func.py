@@ -13,13 +13,6 @@ def convertDTPickerStrToDateTime(DTPStr):
     )
     return newCompDataTime
 
-#       Вызывается при переходе на главную и страницу любого соревнования
-def checkCompetitionStart(competitions):
-    for comp in competitions:
-        if comp.lastTimeForApplications < pytz.UTC.localize(datetime.now()):
-            comp.makeStandings()
-
-
 def sentMail(message, strRecipients):
     sender = "scsapp@yandex.ru"
     password = 'Prostoparol1234'

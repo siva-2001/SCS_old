@@ -15,16 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from SCSapp.views import views
+from SCSapp.views import views, authViews
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('login/', views.logInUserView, name='login'),
-    path('signup/', views.signUpUserView, name='signup'),
-    path('logout/', views.logoutUser, name="logout"),
+    path('login/', authViews.logInUserView, name='login'),
+    path('signup/', authViews.signUpUserView, name='signup'),
+    path('logout/', authViews.logoutUser, name="logout"),
 
     path('', views.compHomePageView, name='homePage'),
     path('past/', views.pastCompetitionsView, name='pastCompetition' ),

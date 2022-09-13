@@ -107,7 +107,7 @@
 
 {% if competition.status == 'Current' or competition.status == 'Past' %}            <!--    ТУРНИРНАЯ ТАБЛИЦА    -->
 <p class="h2 mt-3"><strong>Матчи турнира</strong></p>
-{% for matchData, matchEvent, matchForm, matchIndex in matchesData %}
+{% for matchData, matchForm, matchIndex in matchesData %}
     <div class="row">
         {% if matchData.status_isCompleted %}
         <div class="col-12 col-lg-9 match pastMatch">

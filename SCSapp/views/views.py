@@ -1,63 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from SCSapp.models import Competition, Match, MatchEvent, VolleyballTeam, Player
-from SCSapp.forms import CreateCompetitionsForm, RegistrVolleybolTeamForm, RegistrPlayerForm, MatchEditForm, SignUpUser
-from django.contrib.auth.forms import  AuthenticationForm
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.models import User
+from SCSapp.forms import CreateCompetitionsForm, RegistrVolleybolTeamForm, RegistrPlayerForm, MatchEditForm
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
 from django.core.paginator import Paginator
 import pytz
 from datetime import timedelta, datetime
-from SCSapp.func import convertDTPickerStrToDateTime, checkCompetitionStart
-
-
-def signUpUserView(request):
-    userAuth = request.user.is_authenticated
-    form = SignUpUser()
-    if request.method == 'GET':
-        return render(request, 'signUpUser.html', {'form':form})
-    else:
-        if request.POST['password1'] == request.POST['password2'] and len(request.POST["email"]):
-            try:
-
-                user = User.objects.create_user(username=request.POST['username'], email=request.POST['email'],
-                    first_name=request.POST['first_name'], last_name=request.POST['last_name'])
-                user.set_password(request.POST['password1'])
-                user.save()
-                login(request, user)
-                return redirect('homePage')
-            except:
-                return render(request, 'signUpUser.html', {'form':form, "userAuth":userAuth,
-                    'error':'Имя пользователя занято. Выберите другое'})
-        else:
-            return render(request, 'signUpUser.html', {'form':form,
-                'error':'Пароли не совпадают или не введён e-mail', "userAuth":userAuth})
-
-
-def logInUserView(request):
-    userAuth = request.user.is_authenticated
-    if request.method == "GET":
-        return render(request, 'logInUser.html', {'form':AuthenticationForm()})
-    else:
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is not None:
-            login(request, user)
-            return redirect('homePage')
-        else:
-            return render(request, 'logInUser.html', {"form":AuthenticationForm(), "userAuth":userAuth,
-                                                      "error":'Данные введены неверно'})
-
-
-@login_required
-def logoutUser(request):
-    logout(request)
-    return redirect('homePage')
+from SCSapp.func import convertDTPickerStrToDateTime
 
 def compHomePageView(request):
-    #ompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
-    checkCompetitionStart(Competition.objects.all().filter(status=Competition.ANNOUNSED))
-
     userAuth = request.user.is_authenticated
     announcedCompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
     currentCompetitions = Competition.objects.all().filter(status=Competition.CURRENT)
@@ -86,7 +37,6 @@ def compHomePageView(request):
         'pastCompListIsLong':pastCompListIsLong, "userAuth": userAuth,
         "userIsJudge": request.user.has_perm('SCS.control_competition')})
 
-
 def pastCompetitionsView(request):
     userAuth = request.user.is_authenticated
     pastCompetitions = Competition.objects.all().filter(status=Competition.PAST)
@@ -104,7 +54,6 @@ def pastCompetitionsView(request):
     else:
             return render(request, 'pastCompPage.html', {'page_obj':pastCompetitions, 'paginator': False, 'pageList':[],
             "userAuth":userAuth, "userIsJudge": request.user.has_perm('SCS.control_competition')})
-
 
 @login_required
 def createCompetitionsView(request):
@@ -133,51 +82,57 @@ def createCompetitionsView(request):
         return redirect('homePage')
         #   Ошибка доступа
 
-
-
-
 def competitionView(request, comp_id):
-    #competitions = Competition.objects.all().filter(status= Competition.ANNOUNSED)
-    checkCompetitionStart(Competition.objects.all().filter(status= Competition.ANNOUNSED))
 
     userAuth = request.user.is_authenticated
     competition = get_object_or_404(Competition, pk=comp_id)
     compForm = CreateCompetitionsForm(instance=competition)
     matches = Match.objects.all().filter(competition=competition).order_by('status_isCompleted', 'matchDateTime')
-    teamForm = [RegistrVolleybolTeamForm()]
-    PlayerFormSet = formset_factory(RegistrPlayerForm, extra=6)
-    #playerFormSet = PlayerFormSet()
-    teamForm.append(PlayerFormSet)
     MatchFormSet = formset_factory(MatchEditForm)
 
-    if competition.status == Competition.ANNOUNSED:                                             #    ЗАЯВКА НА УЧАСТИЕ
-        if userAuth:
-            if not request.user.has_perm('SCS.control_competition'):
-                if len(VolleyballTeam.objects.all().filter(competition=competition).filter(user=request.user)) == 0:
-                    requestData = {"userIsJudge": False, "competition": competition, "userAuth":userAuth,
-                                   "teamForm": teamForm, "unableToCreateTeam": False}
-                else:
-                    requestData = {"userIsJudge": False, "competition": competition, "unableToCreateTeam": True,
-                                   "userAuth": userAuth, 'teamFormAns':"Ваша заявка на участие принята"}
-            else:
-                requestData = {"userIsJudge":True, "competition":competition, "compForm":compForm,
-                               "unableToCreateTeam": True, "userAuth":userAuth, }
-        else:
-            requestData = {"userIsJudge": False, "competition": competition, "unableToCreateTeam": True, "userAuth":userAuth}
-    else:
-        matchRunNow = False                                                                     #       ТЕКУЩИЙ МАТЧ
-        now = pytz.UTC.localize(datetime.now())
-        currentMatchData = []
-        for match in matches:
-            if match.matchDateTime:
-                if not match.status_isCompleted and match.matchDateTime < now:
-                    currentMatchData.append([match.firstTeam.name, match.secondTeam.name])
-                    currentMatchData.append([match.firstTeamScore, match.secondTeamScore])
-                    currentMatchData.append(MatchEvent.objects.all().filter(match=match))
-                    matchRunNow = True
-                    break
+    requestData = {
+        'userIsJudge':request.user.has_perm('SCS.control_competition'),
+        'userAuth':request.user.is_authenticated,
+        'competition':competition,
+        'unableToCreateTeam':True
+    }
+    if request.user.has_perm('SCS.control_competition'): requestData['compForm'] = compForm
 
-        matchFormSetInitData, matchesEvents = list(), list()                    #     ТУРНИРНАЯ СЕТКА
+    #-------------------------------------------------------------------------------------------------------------------
+    #       Отображение анонсированного соревнования
+    #------------------------------------------------------------------------------------------------------------------
+
+
+    if competition.status == Competition.ANNOUNSED:
+        if userAuth and not request.user.has_perm('SCS.control_competition'):
+            if len(VolleyballTeam.objects.all().filter(competition=competition).filter(user=request.user)) == 0:
+                requestData['teamForm'] = [RegistrVolleybolTeamForm(), formset_factory(RegistrPlayerForm, extra=6)]
+                requestData["unableToCreateTeam"] = False
+            else:
+                requestData['teamFormAns'] = "Ваша заявка на участие принята"
+    else:
+        now = pytz.UTC.localize(datetime.now())                            # ТЕКУЩИЙ МАТЧ
+        requestData['now'] = now + timedelta(hours=2)
+        currentMatchData = {}
+
+        #
+        # requestData['matchRunNow'] = False              # Определение проведения матча сейчас
+        # for match in matches:
+        #     if match.matchDateTime:
+        #         if not match.status_isCompleted and match.matchDateTime < now:
+        #             requestData['matchRunNow'] = True
+        #             break
+
+
+
+
+
+
+
+
+
+
+        matchFormSetInitData = list()                    #     ТУРНИРНАЯ СЕТКА
         nextMDT = None
         if len(matches): nextMDT = matches[0].matchDateTime
         for match in matches:
@@ -189,29 +144,23 @@ def competitionView(request, comp_id):
                 'secondTeamScore':match.secondTeamScore
             }
             matchFormSetInitData.append(matchFormInitData)
-            matchesEvents.append(MatchEvent.objects.all().filter(match=match))  #   передача событий матча, отображения пока нет
             if match.matchDateTime and nextMDT:
                 if match.matchDateTime > now and match.matchDateTime < nextMDT:
                     nextMDT = match.matchDateTime
         if nextMDT:
             nextMatchDateTime = nextMDT.strftime("%Y:%m:%d %H:%M")
         else: nextMatchDateTime = "Дата неизвестна"
+        requestData['nextMatchDateTime'] = nextMatchDateTime
 
         matchFormSet = MatchFormSet(initial=matchFormSetInitData)
         indexes = [i for i in range(0, len(matches))]
-        matchesData = list(zip(matches, matchesEvents, matchFormSet, indexes))
-
+        requestData['matchesData'] = list(zip(matches, matchFormSet, indexes))
         for matchForm, ind in zip(matchFormSet, indexes):
             matchForm.fields['matchDateTime'].widget.attrs.update({
                 'id': 'id_datetimepicker_' + str(ind)
             })
 
-        requestData = {
-            "userIsJudge":request.user.has_perm('SCS.control_competition'),
-            "matchesData":matchesData, "competition":competition, "compForm":compForm, 'matchFormSet':matchFormSet,
-            "currentMatchData":currentMatchData, "matchRunNow":matchRunNow, "unableToCreateTeam": True,
-            'now':now+timedelta(hours=2), "userAuth":userAuth, 'nextMatchDateTime':nextMatchDateTime
-        }
+        requestData['matchFormSet'] = matchFormSet
 
 
     if request.method == "GET":
@@ -298,7 +247,7 @@ def competitionView(request, comp_id):
                         "userIsJudge": request.user.has_perm('SCS.control_competition'),
                         "matchesData": matchesData, 'matchFormSet': matchFormSet, "competition": competition,
                         "compForm": compForm, "error":"Неверно введены данные соревнования/матчей",
-                        "currentMatchData": currentMatchData, "matchRunNow": matchRunNow,
+                        "currentMatchData": currentMatchData,
                         "unableToCreateTeam": True, "userAuth":userAuth, 'nextMatchDateTime':nextMatchDateTime
                     }
             return render(request, "competition.html", requestData)
