@@ -84,25 +84,29 @@ def createCompetitionsView(request):
 
 def competitionView(request, comp_id):
 
+    #------------------------------------------------------------------------------------------------------------------
+    #       Отображение страницы соревнования
+    #           Извлечение общих данных
+    #------------------------------------------------------------------------------------------------------------------
+
     userAuth = request.user.is_authenticated
     competition = get_object_or_404(Competition, pk=comp_id)
     compForm = CreateCompetitionsForm(instance=competition)
     matches = Match.objects.all().filter(competition=competition).order_by('status_isCompleted', 'matchDateTime')
     MatchFormSet = formset_factory(MatchEditForm)
+    now = pytz.UTC.localize(datetime.now())
 
     requestData = {
         'userIsJudge':request.user.has_perm('SCS.control_competition'),
         'userAuth':request.user.is_authenticated,
         'competition':competition,
-        'unableToCreateTeam':True
+        'unableToCreateTeam':True,
     }
     if request.user.has_perm('SCS.control_competition'): requestData['compForm'] = compForm
 
-    #-------------------------------------------------------------------------------------------------------------------
-    #       Отображение анонсированного соревнования
     #------------------------------------------------------------------------------------------------------------------
-
-
+    #       Извлечение данных для анонсированного соревнования
+    #------------------------------------------------------------------------------------------------------------------
     if competition.status == Competition.ANNOUNSED:
         if userAuth and not request.user.has_perm('SCS.control_competition'):
             if len(VolleyballTeam.objects.all().filter(competition=competition).filter(user=request.user)) == 0:
@@ -110,48 +114,30 @@ def competitionView(request, comp_id):
                 requestData["unableToCreateTeam"] = False
             else:
                 requestData['teamFormAns'] = "Ваша заявка на участие принята"
+
+    # ------------------------------------------------------------------------------------------------------------------
+    #       Извлечение данных текущего/прошедшего соревнования
+    # ------------------------------------------------------------------------------------------------------------------
     else:
-        now = pytz.UTC.localize(datetime.now())                            # ТЕКУЩИЙ МАТЧ
         requestData['now'] = now + timedelta(hours=2)
-        currentMatchData = {}
 
-        #
-        # requestData['matchRunNow'] = False              # Определение проведения матча сейчас
-        # for match in matches:
-        #     if match.matchDateTime:
-        #         if not match.status_isCompleted and match.matchDateTime < now:
-        #             requestData['matchRunNow'] = True
-        #             break
-
-
-
-
-
-
-
-
-
-
-        matchFormSetInitData = list()                    #     ТУРНИРНАЯ СЕТКА
+        #   Match form set init data
+        matchFormSetInitData = list()
         nextMDT = None
         if len(matches): nextMDT = matches[0].matchDateTime
         for match in matches:
-            matchFormInitData = {
+            matchFormSetInitData.append({
                 'name':match.name,
                 'place':match.place,
                 'matchDateTime':match.matchDateTime,
                 'firstTeamScore':match.firstTeamScore,
                 'secondTeamScore':match.secondTeamScore
-            }
-            matchFormSetInitData.append(matchFormInitData)
+            })
             if match.matchDateTime and nextMDT:
                 if match.matchDateTime > now and match.matchDateTime < nextMDT:
                     nextMDT = match.matchDateTime
-        if nextMDT:
-            nextMatchDateTime = nextMDT.strftime("%Y:%m:%d %H:%M")
-        else: nextMatchDateTime = "Дата неизвестна"
-        requestData['nextMatchDateTime'] = nextMatchDateTime
 
+        #   Match Form Set
         matchFormSet = MatchFormSet(initial=matchFormSetInitData)
         indexes = [i for i in range(0, len(matches))]
         requestData['matchesData'] = list(zip(matches, matchFormSet, indexes))
@@ -159,14 +145,23 @@ def competitionView(request, comp_id):
             matchForm.fields['matchDateTime'].widget.attrs.update({
                 'id': 'id_datetimepicker_' + str(ind)
             })
-
         requestData['matchFormSet'] = matchFormSet
+
+        #   Next match datetime string
+        if nextMDT:
+            nextMatchDateTime = nextMDT.strftime("%Y:%m:%d %H:%M")
+        else: nextMatchDateTime = "Дата неизвестна"
+        requestData['nextMatchDateTime'] = nextMatchDateTime
+
 
 
     if request.method == "GET":
         return render(request, "competition.html", requestData)
     else:
         try:
+            # ----------------------------------------------------------------------------------------------------------
+            #       Обработка формы редактирования соревнования
+            # ----------------------------------------------------------------------------------------------------------
             if request.POST['formType'] == 'compEditForm':
                 competition.name=request.POST['name']
                 competition.discription = request.POST['discription']
@@ -174,12 +169,13 @@ def competitionView(request, comp_id):
                 if competition.status == Competition.ANNOUNSED:
                     competition.theNumberOfTeamsRequiredToStartTheCompetition = \
                         request.POST['theNumberOfTeamsRequiredToStartTheCompetition']
-                    if not request.POST['lastTimeForApplications'] == competition.getLastTimeForApplicationStr():
-                        newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
-                        competition.lastTimeForApplications = newCompDataTime
+                    newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
+                    competition.lastTimeForApplications = newCompDataTime
                 competition.save()
 
-
+            # ----------------------------------------------------------------------------------------------------------
+            #       Обработка формы редактирования матча
+            # ----------------------------------------------------------------------------------------------------------
             elif request.POST['formType'] == "matchEditForm":
                 match = matches.get(id=int(request.POST['id']))
                 for i, m in enumerate(matches):
@@ -193,17 +189,20 @@ def competitionView(request, comp_id):
                     match.firstTeamScore = int(request.POST['form-' + str(index) + '-firstTeamScore'])
                     match.secondTeamScore = int(request.POST['form-' + str(index) + '-secondTeamScore'])
                 if not(int(request.POST['form-' + str(index) + '-firstTeamScore']) == 0 and
-                       int(request.POST['form-' + str(index) + '-secondTeamScore'])):
+                       int(request.POST['form-' + str(index) + '-secondTeamScore']) == 0):
                     match.status_isCompleted = True
                     match.save()
                     competition.updateStanding(match.id)
                 match.save()
 
+            # ------------------------------------------------------------------------------------------------------------------
+            #       Обработка формы регистрации новой команды
+            # ------------------------------------------------------------------------------------------------------------------
             elif request.POST['formType'] == "teamRegistrForm":
                 #playerFormSet = PlayerFormSet(request.POST)                                <---------------------->
                 teamForm = RegistrVolleybolTeamForm(request.POST)
                 team = teamForm.save(commit=False)
-                team.registratedTime = pytz.UTC.localize(datetime.now())
+                team.registratedTime = now
                 team.competition=competition
                 team.user = request.user
                 team.save()
@@ -235,21 +234,13 @@ def competitionView(request, comp_id):
         except Exception as e:
             print("Exept:", e)
             if request.POST['formType'] == "teamRegistrForm":
-                requestData = {"userIsJudge": False, "competition": competition, "error":"Неверно введены данные команды",
-                                "teamForm": teamForm, "unableToCreateTeam": False, "userAuth":userAuth}
+                requestData["error"] = "Неверно введены данные команды"
             else:
                 if competition.status == Competition.ANNOUNSED:
-                    requestData = {"userIsJudge": True, "competition": competition, "compForm": compForm,
-                                   "unableToCreateTeam": True, "userAuth":userAuth,
-                                   "error":"Ошибка обновления данных соревнования",}
+                    requestData["error"] = "Ошибка обновления данных соревнования"
                 else:
-                    requestData = {
-                        "userIsJudge": request.user.has_perm('SCS.control_competition'),
-                        "matchesData": matchesData, 'matchFormSet': matchFormSet, "competition": competition,
-                        "compForm": compForm, "error":"Неверно введены данные соревнования/матчей",
-                        "currentMatchData": currentMatchData,
-                        "unableToCreateTeam": True, "userAuth":userAuth, 'nextMatchDateTime':nextMatchDateTime
-                    }
+                    requestData["error"] = "Неверно введены данные соревнования/матчей"
+
             return render(request, "competition.html", requestData)
 
 
