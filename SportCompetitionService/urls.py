@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from SCSapp.views import views, authViews
+from SCSapp.views import competitonListsViews, authViews
+from SCSapp.views.competitionView import competitionView
+from SCSapp.views.createCompetitionView import createCompetitionsView
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -26,10 +28,10 @@ urlpatterns = [
     path('signup/', authViews.signUpUserView, name='signup'),
     path('logout/', authViews.logoutUser, name="logout"),
 
-    path('', views.compHomePageView, name='homePage'),
-    path('past/', views.pastCompetitionsView, name='pastCompetition' ),
-    path('createCompetition/', views.createCompetitionsView, name='createCompetition'),
-    path('competition/<comp_id>/', views.competitionView, name='competition'),
+    path('', competitonListsViews.compHomePageView, name='homePage'),
+    path('past/', competitonListsViews.pastCompetitionsView, name='pastCompetition' ),
+    path('createCompetition/', createCompetitionsView, name='createCompetition'),
+    path('competition/<comp_id>/', competitionView, name='competition'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

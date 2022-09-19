@@ -4,93 +4,11 @@ import random
 from django.contrib.auth.models import User
 import pytz
 from datetime import datetime
-from .func import sentMail
-from .protocolCreator import PDF
+from SCSapp.func import sentMail
+from SCSapp.protocolCreator import PDF
 from django.core.files import File
 import os
-
-
-class VolleyballTeam(models.Model):
-    name = models.CharField(max_length=64, verbose_name="Название")
-    registratedTime = models.DateTimeField(auto_now_add=True, verbose_name="Время регистрации")
-    discription = models.TextField(blank=True, verbose_name="Описание")
-    competition = models.ForeignKey('Competition', on_delete=models.CASCADE, verbose_name="Соревнования")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = 'Команда'
-        verbose_name_plural = 'Команды'
-
-    def __str__(self):#
-        return self.name
-
-    def getRegisteredTime(self):
-        return self.registratedTime.strftime("%H:%M   %Y:%m:%d")
-
-    def getProtocolFormat(self):
-        if not(len(self.user.last_name) == 0 and len(self.user.first_name) == 0):
-            return {"name":self.name,"registeredTime":self.getRegisteredTime(),
-                    "user":(self.user.last_name + " " + self.user.first_name[:1] + ".")}
-        else:
-            return  {"name": self.name, "registeredTime": self.getRegisteredTime(), "user":' '}
-
-#    def get_ablolut_url(self):
-#        return reverse()
-
-class Player(models.Model):
-    class Meta:
-        ordering = ['surename', 'name']
-        verbose_name = 'Игрок'
-        verbose_name_plural = 'Игроки'
-
-    name = models.CharField(max_length=32, verbose_name='Имя')
-    surename = models.CharField(max_length=32, verbose_name='Фамилия')
-    patronymic = models.CharField(max_length=32, blank=True, null=True, verbose_name='Отчество')
-    age = models.IntegerField(verbose_name='Возраст')
-    team = models.ManyToManyField(VolleyballTeam, blank=True)
-
-    def __str__(self):
-        return f'{self.name}  {self.surename}'
-
-
-
-class MatchEvent(models.Model):
-    class Meta:
-        verbose_name = 'Событие'
-        verbose_name_plural = 'События'
-    GOAL = 'Goal'
-    PLAYER_REPLACEMENT = 'Player replacement'
-    PART = 'Part'
-    INTERVAL = 'Interval'
-    END = 'Game over'
-    NONE = 0
-    FIRST = 1
-    SECOND = 2
-
-    teamChoise = [
-        (FIRST, 'first'),
-        (SECOND, 'second'),
-    ]
-    eventTypeChoises = [
-        (GOAL, 'Goal'),
-        (PLAYER_REPLACEMENT, 'Player replacement'),
-        (PART, 'Part'),
-        (INTERVAL, 'Interval'),
-        (END, 'Game over'),
-    ]
-
-    eventType = models.CharField(
-        max_length=20,
-        choices=eventTypeChoises
-    )
-
-
-    Team = models.IntegerField(choices=teamChoise, verbose_name="Команда", null=True, blank=True)
-    EventTime = models.TimeField(auto_now_add=True, verbose_name="Время события")
-    match = models.ForeignKey('Match', on_delete=models.CASCADE, verbose_name="Матч")
-
-    def __str__(self):
-        return f"{self.eventType}, team {self.Team} in {self.EventTime}"
+from SCSapp.models.VolleyballTeam import VolleyballTeam
 
 class Competition(models.Model):
     ANNOUNSED = 'Announsed'
@@ -246,49 +164,3 @@ class Competition(models.Model):
         strRecipients = strRecipients[:-2]
         message = f"Соревнования {self.name} стартовали!"
         sentMail(message=message, strRecipients=strRecipients)
-
-
-
-
-
-
-class Match(models.Model):
-    class Meta:
-        verbose_name = 'Матч'
-        verbose_name_plural = 'Матчи'
-    name = models.CharField(max_length=64)
-    nextMatch = models.ForeignKey('self', on_delete=models.CASCADE, null=True, default=None, blank=True)
-    firstTeam = models.ForeignKey(VolleyballTeam, blank=True,
-        null=True, on_delete=models.SET_NULL, related_name="first_team", default=None)
-    secondTeam = models.ForeignKey(VolleyballTeam, blank=True,
-        null=True, on_delete=models.SET_NULL, related_name="second_team", default=None)
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
-    matchDateTime = models.DateTimeField(null=True, default=None)
-    firstTeamScore = models.IntegerField(default=0)
-    secondTeamScore = models.IntegerField(default=0)
-    place = models.CharField(max_length=128, blank=True, null=True)
-    status_isCompleted = models.BooleanField(default=False)
-    protocol = models.FileField(upload_to='match_protocols', null=True, blank=True)
-        # Значение по умолчанию - названия команд
-
-    def getDateTime(self):
-        if self.matchDateTime:
-            return self.matchDateTime.strftime("%Y:%m:%d %H:%M")
-        else: return "Дата неизвестна"
-
-    def __str__(self):
-        return f"Матч '{self.name}'"
-
-    def getProtocolFormat(self):
-        if self.firstTeamScore > self.secondTeamScore:
-            winScore = self.firstTeamScore
-            losScore = self.secondTeamScore
-            winner = self.firstTeam.name
-            loser = self.secondTeam.name
-        else:
-            winScore = self.secondTeamScore
-            losScore = self.firstTeamScore
-            winner = self.secondTeam.name
-            loser = self.firstTeam.name
-        return {"time":self.getDateTime(),"place":self.place,"winner":winner,
-                "winScore":str(winScore), "loser":loser, "losScore":str(losScore)}

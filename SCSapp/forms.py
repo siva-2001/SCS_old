@@ -1,5 +1,8 @@
 from django import forms
-from .models import Competition, Player, VolleyballTeam, Match
+from SCSapp.models.Competition import Competition
+from SCSapp.models.Player import Player
+from SCSapp.models.VolleyballTeam import VolleyballTeam
+from SCSapp.models.Match import Match
 from django.forms.widgets import DateTimeInput, TextInput, Textarea
 #from crispy_forms.helper import FormHelper
 from django.contrib.auth.models import User

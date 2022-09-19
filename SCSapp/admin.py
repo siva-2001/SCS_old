@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Player, VolleyballTeam, Competition, Match, MatchEvent
+from SCSapp.models import Player, VolleyballTeam, Competition, Match, MatchEvents
 
-admin.site.register(Player)
-admin.site.register(VolleyballTeam)
-admin.site.register(Competition)
-admin.site.register(Match)
-admin.site.register(MatchEvent)
+admin.site.register(Player.Player)
+admin.site.register(VolleyballTeam.VolleyballTeam)
+admin.site.register(Competition.Competition)
+admin.site.register(Match.Match)
+admin.site.register(MatchEvents.MatchEvent)

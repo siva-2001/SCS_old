@@ -1,86 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from SCSapp.models import Competition, Match, MatchEvent, VolleyballTeam, Player
+
+from SCSapp.models.Competition import Competition
+from SCSapp.models.Match import Match
+from SCSapp.models.VolleyballTeam import VolleyballTeam
+from SCSapp.models.Player import Player
+
+
+
 from SCSapp.forms import CreateCompetitionsForm, RegistrVolleybolTeamForm, RegistrPlayerForm, MatchEditForm
-from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
-from django.core.paginator import Paginator
 import pytz
 from datetime import timedelta, datetime
 from SCSapp.func import convertDTPickerStrToDateTime
-
-def compHomePageView(request):
-    userAuth = request.user.is_authenticated
-    announcedCompetitions = Competition.objects.all().filter(status=Competition.ANNOUNSED)
-    currentCompetitions = Competition.objects.all().filter(status=Competition.CURRENT)
-    pastCompetitions = Competition.objects.all().filter(status=Competition.PAST)
-    if(len(pastCompetitions) > 3):
-        pastCompListIsLong = True
-        pastCompetitions = pastCompetitions[:3]
-    else:
-        pastCompListIsLong = False
-
-    # обрезать в html
-    #
-    for comp in announcedCompetitions:
-        if len(comp.discription) > 150:
-            comp.discription = comp.discription[:130] + "..."
-    for comp in currentCompetitions:
-        if len(comp.discription) > 150:
-            comp.discription = comp.discription[:130] + "..."
-    for comp in pastCompetitions:
-        if len(comp.discription) > 150:
-            comp.discription = comp.discription[:130] + "..."
-    #
-    #
-    return render(request, 'homePage.html', {'announcedCompetitions': announcedCompetitions,
-        'currentCompetitions': currentCompetitions,'pastCompetitions': pastCompetitions,
-        'pastCompListIsLong':pastCompListIsLong, "userAuth": userAuth,
-        "userIsJudge": request.user.has_perm('SCS.control_competition')})
-
-def pastCompetitionsView(request):
-    userAuth = request.user.is_authenticated
-    pastCompetitions = Competition.objects.all().filter(status=Competition.PAST)
-    for comp in pastCompetitions:
-        if len(comp.discription) > 200:
-            comp.discription = comp.discription[:180] + "..."
-    pageLen = 5
-    if len(pastCompetitions) > pageLen:
-        paginator = Paginator(pastCompetitions, pageLen)
-        page_number = request.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
-        pageList = paginator.get_elided_page_range(number=page_number)
-        return render(request, 'pastCompPage.html', {'page_obj': page_obj, 'pageList':pageList, 'paginator':True,
-            "userIsJudge": request.user.has_perm('SCS.control_competition'), "userAuth":userAuth})
-    else:
-            return render(request, 'pastCompPage.html', {'page_obj':pastCompetitions, 'paginator': False, 'pageList':[],
-            "userAuth":userAuth, "userIsJudge": request.user.has_perm('SCS.control_competition')})
-
-@login_required
-def createCompetitionsView(request):
-    userAuth = request.user.is_authenticated
-    if request.user.has_perm('SCS.control_competition'):
-        if request.method == "GET":
-            return render(request, 'createCompetitions.html', {'form':CreateCompetitionsForm(), "userAuth":userAuth,
-                                                               "userIsJudge": request.user.has_perm('SCS.control_competition')})
-        else:
-            try:
-                newCompDataTime = convertDTPickerStrToDateTime(request.POST['lastTimeForApplications'])
-                newCompetition = Competition(
-                    name=request.POST['name'],
-                    discription=request.POST['discription'],
-                    lastTimeForApplications=newCompDataTime,
-                    organizer=request.user,
-                    organizerName=request.POST['organizerName'],
-                    status = Competition.ANNOUNSED
-                )
-                newCompetition.save()
-                return redirect(newCompetition)
-            except:
-                return render(request, 'createCompetitions.html', {'form':CreateCompetitionsForm(),
-                                                                   "error":"Bad data, try again", "userAuth":userAuth})
-    else:
-        return redirect('homePage')
-        #   Ошибка доступа
 
 def competitionView(request, comp_id):
 

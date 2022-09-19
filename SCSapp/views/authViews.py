@@ -27,7 +27,6 @@ def signUpUserView(request):
             return render(request, 'signUpUser.html', {'form':form,
                 'error':'Пароли не совпадают или не введён e-mail', "userAuth":userAuth})
 
-
 def logInUserView(request):
     userAuth = request.user.is_authenticated
     if request.method == "GET":
@@ -40,7 +39,6 @@ def logInUserView(request):
         else:
             return render(request, 'logInUser.html', {"form":AuthenticationForm(), "userAuth":userAuth,
                                                       "error":'Данные введены неверно'})
-
 
 @login_required
 def logoutUser(request):

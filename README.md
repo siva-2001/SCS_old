@@ -1,4 +1,10 @@
 # Task list will be here
 
-+ [ ] task 1
-+ [x] task 2
+## Гоша
++ [ ] Task
+
+## Игорь
++ [ ] Task
+
+## Денис
++ [ ] Task
