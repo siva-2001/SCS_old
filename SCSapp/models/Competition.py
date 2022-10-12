@@ -10,6 +10,9 @@ from django.core.files import File
 import os
 from SCSapp.models.VolleyballTeam import VolleyballTeam
 
+решение циклического импорта:
+models.ForeignKey('orders.Order',
+
 class Competition(models.Model):
     ANNOUNSED = 'Announsed'
     CURRENT = 'Current'
